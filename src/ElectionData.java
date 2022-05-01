@@ -48,10 +48,19 @@ class ElectionData {
         return numvotes;
     }
 
-    public void processVote(String FirstVote, String SecondVote, String ThirdVote){
+
+    public void processVote(String FirstVote, String SecondVote, String ThirdVote) {
         firstVotes.put(i, FirstVote);
         secondVotes.put(i, SecondVote);
         thirdVotes.put(i, ThirdVote);
         ++i;
+    }
+    public void addCandidate(String newCandiate) throws CandidateExistsException {
+            if (ballot.contains(newCandiate)){
+                throw new CandidateExistsException("The candidate " + newCandiate + "is already on the ballot");
+            }
+            else {
+                ballot.add(newCandiate);
+            }
     }
 }
