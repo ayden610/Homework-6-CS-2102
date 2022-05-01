@@ -34,4 +34,13 @@ class ElectionData {
         }
         return numvotes;
     }
+
+    public void addCandidate(String newCandiate) throws CandidateExistsException {
+            if (ballot.contains(newCandiate)){
+                throw new CandidateExistsException("The candidate " + newCandiate + "is already on the ballot");
+            }
+            else {
+                ballot.add(newCandiate);
+            }
+    }
 }
