@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.Hashtable;
 
 class ElectionData {
-    LinkedList<String> ballot = new LinkedList<String>();
+    LinkedList<String> ballot = new LinkedList<>();
     Hashtable<Integer, String> firstVotes = new Hashtable<>();
     Hashtable<Integer, String> secondVotes = new Hashtable<>();
     Hashtable<Integer, String> thirdVotes = new Hashtable<>();
@@ -86,17 +86,17 @@ class ElectionData {
      * This function returns the candidate with the most first votes,
      * given that they hold more than 50% of the vote
      *
-     * @returns a string of the winner of a given election based on the first vote percentage
+     * @returns String of the winner of a given election based on the first vote percentage
      */
     public String findWinnerMostFirstVotes(){
         int numVotes = 0;
         for(String candidate : ballot){
             for(int j = 0; j < firstVotes.size(); ++j){
-            if(firstVotes.get(i).equals(candidate)){
+            if(firstVotes.get(j).equals(candidate)){
                 ++numVotes;
             }
             }
-            float percentVotes = numVotes / firstVotes.size();
+            double percentVotes = (numVotes * 1.0)  / (firstVotes.size() * 1.0);
             if(percentVotes > 0.5){
                 return candidate;
             }
@@ -116,17 +116,17 @@ class ElectionData {
         int bestPoints = 0;
         for(String candidate : ballot){
             for(int j = 0; j < firstVotes.size(); ++j){
-                if(firstVotes.get(j).toLowerCase().equals(candidate.toLowerCase())){
+                if(firstVotes.get(j).equalsIgnoreCase(candidate)){
                     currPoints += 3;
                 }
             }
             for(int j = 0; j < secondVotes.size(); ++j){
-                if(secondVotes.get(j).toLowerCase().equals(candidate.toLowerCase())){
+                if(secondVotes.get(j).equalsIgnoreCase(candidate)){
                     currPoints += 2;
                 }
             }
             for(int j = 0; j < thirdVotes.size(); ++j){
-                if(thirdVotes.get(j).toLowerCase().equals(candidate.toLowerCase())){
+                if(thirdVotes.get(j).equalsIgnoreCase(candidate)){
                     currPoints +=1;
                 }
             }

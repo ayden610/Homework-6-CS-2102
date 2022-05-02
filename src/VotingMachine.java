@@ -1,8 +1,9 @@
 import java.util.Scanner;
 public class VotingMachine {
-    static Scanner keyboard = new Scanner(System.in);
-    static ElectionData thisElection = new ElectionData();
-    static void main(String[] args)throws DuplicateVotesException, UnknownCandidateException, CandidateExistsException{
+    public Scanner keyboard = new Scanner(System.in);
+    public static ElectionData thisElection = new ElectionData();
+
+        public void screen() throws CandidateExistsException {
         System.out.println("Enter A to add candidate, " +
                 "T to tally the election, or V to vote:");
         String selection = keyboard.next();
@@ -13,7 +14,6 @@ public class VotingMachine {
                 thisElection.addCandidate(addCan);
                 break;
             case ("v"):
-                try {
                     thisElection.printBallot();
                     System.out.println("Select your first vote:");
                     String candidate1 = keyboard.next();
@@ -21,34 +21,36 @@ public class VotingMachine {
                     String candidate2 = keyboard.next();
                     System.out.println("Select your third vote:");
                     String candidate3 = keyboard.next();
-                    thisElection.processVote(candidate1, candidate2, candidate3);
+                    try{ thisElection.processVote(candidate1, candidate2, candidate3);
                     System.out.println("You voted for" + candidate1 + ", " + candidate2 + ", " + candidate3);
-                } catch(UnknownCandidateException anException){
+                } catch (UnknownCandidateException anException) {
                     System.out.println("The candidate" + anException.getUnknownCandidate() +
                             "is not on the ballot, would you like to write them in? press Y to write them in:");
                     String exceptionAnswer = keyboard.next();
-                    switch(exceptionAnswer.toLowerCase()){
-                        case("y"):
+                    switch (exceptionAnswer.toLowerCase()) {
+                        case ("y"):
                             addWriteIn(anException.getUnknownCandidate());
                             break;
                         default:
                             break;
                     }
 
-            } catch(DuplicateVotesException e){
+                } catch (DuplicateVotesException e) {
                     System.out.println("you cannot vote for the same candidate twice!");
                 }
                 break;
-            case("t"):
+            case ("t"):
                 thisElection.findWinnerMostFirstVotes();
 
         }
     }
+
     public static void addWriteIn(String candidateName) throws CandidateExistsException {
-        try{thisElection.addCandidate(candidateName);
-    } catch(CandidateExistsException e) {
+        try {
+            thisElection.addCandidate(candidateName);
+        } catch (CandidateExistsException e) {
             System.out.println("The candidate " + candidateName + " already exists.");
         }
         System.out.println("The candidate " + candidateName + " has been added to the ballot.");
-        }
+    }
 }
