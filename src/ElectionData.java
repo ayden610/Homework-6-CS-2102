@@ -1,18 +1,16 @@
 import java.util.LinkedList;
-import java.util.Scanner;
 import java.util.Hashtable;
 
 class ElectionData {
     LinkedList<String> ballot = new LinkedList<String>();
-    LinkedList<String> votes = new LinkedList<String>();
     Hashtable<Integer, String> firstVotes = new Hashtable<>();
     Hashtable<Integer, String> secondVotes = new Hashtable<>();
     Hashtable<Integer, String> thirdVotes = new Hashtable<>();
-    Scanner keyboard = new Scanner(System.in);
+
     int i = 0;
     ElectionData() {
-        this.ballot.add("Gompei");
-        this.ballot.add("Husky");
+        this.ballot.add("gompei");
+        this.ballot.add("husky");
     }
 
     public void printBallot() {
@@ -22,32 +20,7 @@ class ElectionData {
         }
     }
 
-    public void screen() throws DuplicateVotesException, UnknownCandidateException, CandidateExistsException {
-        System.out.println("Enter A to add candidate, " +
-                "T to tally the election, or V to vote:");
-        String selection = keyboard.next();
-        switch (selection.toLowerCase()) {
-            case ("a"):
-                System.out.println("Enter the candidate to add:");
-                String addCan = keyboard.next();
-                addCandidate(addCan);
-                break;
-            case ("v"):
-                this.printBallot();
-                System.out.println("Select your first vote:");
-                String candidate1 = keyboard.next();
-                System.out.println("Select your second vote:");
-                String candidate2 = keyboard.next();
-                System.out.println("Select your third vote:");
-                String candidate3 = keyboard.next();
-                processVote(candidate1, candidate2, candidate3);
-                System.out.println("You voted for" + candidate1 + ", " + candidate2 + ", " + candidate3);
-                break;
-            case("t"):
-                findWinnerMostFirstVotes();
 
-        }
-    }
 
 
     /**
@@ -64,27 +37,30 @@ class ElectionData {
      */
     public void processVote(String firstVote, String secondVote, String thirdVote)
             throws DuplicateVotesException, UnknownCandidateException{
-        if (!ballot.contains(firstVote)){
-            throw new UnknownCandidateException(firstVote);
+        String firstvote = firstVote.toLowerCase();
+        String secondvote = secondVote.toLowerCase();
+        String thirdvote = thirdVote.toLowerCase();
+        if (!ballot.contains(firstvote)){
+            throw new UnknownCandidateException(firstvote);
         }
-        else {firstVotes.put(i, firstVote);}
+        else {firstVotes.put(i, firstvote);}
 
-        if (!ballot.contains(secondVote)){
-            throw new UnknownCandidateException(secondVote);
+        if (!ballot.contains(secondvote)){
+            throw new UnknownCandidateException(secondvote);
         }
-            else if (firstVote.equals(secondVote)){
-                throw new DuplicateVotesException(secondVote);
+            else if (firstvote.equals(secondvote)){
+                throw new DuplicateVotesException(secondvote);
             } else{
-                secondVotes.put(i, secondVote);
+                secondVotes.put(i, secondvote);
             }
 
-        if (!ballot.contains(thirdVote)) {
-            throw new UnknownCandidateException(thirdVote);
-        } else if (firstVote.toLowerCase().equals(thirdVote.toLowerCase())
-                    || secondVote.toLowerCase().equals(thirdVote.toLowerCase())){
-                throw new DuplicateVotesException(thirdVote);
+        if (!ballot.contains(thirdvote)){
+            throw new UnknownCandidateException(thirdvote);
+        }else if (firstvote.equals(thirdvote)
+                    || secondvote.equals(thirdvote)){
+                throw new DuplicateVotesException(thirdvote);
             } else{
-                thirdVotes.put(i, thirdVote);
+                thirdVotes.put(i, thirdvote);
             }
 
         ++i;
@@ -98,11 +74,11 @@ class ElectionData {
      * @throws CandidateExistsException is thrown when the candidate is already on the ballot
      */
     public void addCandidate(String newCandiate) throws CandidateExistsException {
-            if (ballot.contains(newCandiate)){
-                throw new CandidateExistsException(newCandiate);
+            if (ballot.contains(newCandiate.toLowerCase())){
+                throw new CandidateExistsException(newCandiate.toLowerCase());
             }
             else {
-                ballot.add(newCandiate);
+                ballot.add(newCandiate.toLowerCase());
             }
     }
 
@@ -110,17 +86,17 @@ class ElectionData {
      * This function returns the candidate with the most first votes,
      * given that they hold more than 50% of the vote
      *
-     * @returns the winner of a given election based on the first vote percentage
+     * @returns a string of the winner of a given election based on the first vote percentage
      */
     public String findWinnerMostFirstVotes(){
         int numVotes = 0;
         for(String candidate : ballot){
             for(int j = 0; j < firstVotes.size(); ++j){
-            if(firstVotes.get(i) == candidate){
+            if(firstVotes.get(i).equals(candidate)){
                 ++numVotes;
             }
             }
-            double percentVotes = numVotes / firstVotes.size();
+            float percentVotes = numVotes / firstVotes.size();
             if(percentVotes > 0.5){
                 return candidate;
             }

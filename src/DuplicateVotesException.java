@@ -7,7 +7,8 @@ public class DuplicateVotesException extends Exception {
     public DuplicateVotesException(String candidateName) {
         this.candidateName = candidateName;
     }
-    public String gitDuplicateCandidate(){
+    public String getDuplicateCandidate(){
+
         return candidateName;
     }
 }
