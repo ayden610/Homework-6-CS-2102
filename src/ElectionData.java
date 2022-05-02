@@ -49,15 +49,37 @@ class ElectionData {
     }
 
 
-    public void processVote(String FirstVote, String SecondVote, String ThirdVote) {
-        firstVotes.put(i, FirstVote);
-        secondVotes.put(i, SecondVote);
-        thirdVotes.put(i, ThirdVote);
+    public void processVote(String firstVote, String secondVote, String thirdVote)
+            throws DuplicateVotesException, UnknownCandidateException{
+        if (!ballot.contains(firstVote)){
+            throw new UnknownCandidateException(firstVote);
+        }
+        else {firstVotes.put(i, firstVote);}
+
+        if (!ballot.contains(secondVote)){
+            throw new UnknownCandidateException(secondVote);
+        }
+            else if (firstVote.equals(secondVote)){
+                throw new DuplicateVotesException(secondVote);
+            } else{
+                secondVotes.put(i, secondVote);
+            }
+
+        if (!ballot.contains(thirdVote)) {
+            throw new UnknownCandidateException(thirdVote);
+        } else if (firstVote.toLowerCase().equals(thirdVote.toLowerCase())
+                    || secondVote.toLowerCase().equals(thirdVote.toLowerCase())){
+                throw new DuplicateVotesException(thirdVote);
+            } else{
+                thirdVotes.put(i, thirdVote);
+            }
+
         ++i;
     }
+
     public void addCandidate(String newCandiate) throws CandidateExistsException {
             if (ballot.contains(newCandiate)){
-                throw new CandidateExistsException("The candidate " + newCandiate + "is already on the ballot");
+                throw new CandidateExistsException(newCandiate);
             }
             else {
                 ballot.add(newCandiate);
