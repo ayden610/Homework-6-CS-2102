@@ -2,25 +2,17 @@ import java.util.LinkedList;
 import java.util.Hashtable;
 
 class ElectionData {
-    LinkedList<String> ballot = new LinkedList<>();
-    Hashtable<Integer, String> firstVotes = new Hashtable<>();
-    Hashtable<Integer, String> secondVotes = new Hashtable<>();
-    Hashtable<Integer, String> thirdVotes = new Hashtable<>();
+    private LinkedList<String> ballot = new LinkedList<>();
+    private Hashtable<Integer, String> firstVotes = new Hashtable<>();
+    private Hashtable<Integer, String> secondVotes = new Hashtable<>();
+    private Hashtable<Integer, String> thirdVotes = new Hashtable<>();
+    public LinkedList<String> getBallot() {
+        return ballot;
+    }
+
 
     int i = 0;
-    ElectionData() {
-        this.ballot.add("gompei");
-        this.ballot.add("husky");
-    }
-
-    public void printBallot() {
-        System.out.println("The candidates are ");
-        for (String s : ballot) {
-            System.out.println(s);
-        }
-    }
-
-
+    ElectionData() {}
 
 
     /**
@@ -89,8 +81,8 @@ class ElectionData {
      * @returns String of the winner of a given election based on the first vote percentage
      */
     public String findWinnerMostFirstVotes(){
-        int numVotes = 0;
         for(String candidate : ballot){
+            int numVotes = 0;
             for(int j = 0; j < firstVotes.size(); ++j){
             if(firstVotes.get(j).equals(candidate)){
                 ++numVotes;
@@ -112,9 +104,9 @@ class ElectionData {
      */
     public String findWinnerMostPoints(){
         String candidateMostPoints = ballot.get(0);
-        int currPoints = 0;
         int bestPoints = 0;
         for(String candidate : ballot){
+            int currPoints = 0;
             for(int j = 0; j < firstVotes.size(); ++j){
                 if(firstVotes.get(j).equalsIgnoreCase(candidate)){
                     currPoints += 3;

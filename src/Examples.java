@@ -1,9 +1,10 @@
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class Examples {
 
-    ElectionData Setup1 () {
+    ElectionData Setup1() {
 
         ElectionData ED = new ElectionData();
 
@@ -13,7 +14,8 @@ public class Examples {
             ED.addCandidate("husky");
             ED.addCandidate("ziggy");
 
-        } catch (Exception e) {}
+        } catch (CandidateExistsException e) {
+        }
 
         try {
 
@@ -21,66 +23,71 @@ public class Examples {
             ED.processVote("gompei", "ziggy", "husky");
             ED.processVote("husky", "gompei", "ziggy");
 
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
-        return(ED);
+        return (ED);
 
     }
 
-    ElectionData Setup2 () {
+    ElectionData Setup2() {
 
         ElectionData ED2 = new ElectionData();
 
         try {
 
-            ED2.addCandidate("grompi");
+            ED2.addCandidate("gompei");
             ED2.addCandidate("husky");
             ED2.addCandidate("ziggy");
 
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
 
-            ED2.processVote("grompi", "husky", "grompi");
-            ED2.processVote("grompi", "husky", "ziggy");
-            ED2.processVote("grompi", "ziggy", "husky");
+            ED2.processVote("gompei", "husky", "ziggy");
+            ED2.processVote("ziggy", "gompei", "husky");
+            ED2.processVote("husky", "gompei", "ziggy");
 
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         return (ED2);
+
     }
 
-    ElectionData Setup3 () {
 
-        ElectionData ED3 = new ElectionData();
-
-        try {
-
-            ED3.addCandidate("grompi");
-            ED3.addCandidate("husky");
-            ED3.addCandidate("ziggy");
-            ED3.addCandidate("grompi");
-
-        } catch (Exception e) {}
-
-        try {
-
-            ED3.processVote("gompei", "husky", "ziggy");
-            ED3.processVote("gompei", "ziggy", "husky");
-            ED3.processVote("husky", "gompei", "ziggy");
-
-        } catch (Exception e) {}
-
-        return (ED3);
+    @Test
+    public void testMostFirstVotes() {
+        assertEquals("gompei", Setup1().findWinnerMostFirstVotes());
     }
 
     @Test
-    public void testMostFirstVotes () {
-        assertEquals ("gompei", Setup1().findWinnerMostFirstVotes());
+    public void testrunoff() {
+        assertEquals("Runoff required", Setup2().findWinnerMostFirstVotes());
     }
 
-    @Test ( expected = DuplicateVotesException.class)
-    public void testDublicateVotes() throws DuplicateVotesException {
-        Setup2().findWinnerMostFirstVotes();
+    @Test
+    public void testMostPoints() {
+        assertEquals("gompei", Setup1().findWinnerMostPoints());
+    }
+
+    @Test (expected = DuplicateVotesException.class)
+    public void testDuplicateVotes() throws DuplicateVotesException, UnknownCandidateException,
+            CandidateExistsException {
+
+        ElectionData ED3 = new ElectionData();
+
+        ED3.addCandidate("gompei");
+
+        ED3.processVote("gompei", "gompei", "gompei");
+    }
+
+    @Test (expected = UnknownCandidateException.class)
+    public void testUnkownCan() throws UnknownCandidateException, DuplicateVotesException {
+
+        ElectionData ED4 = new ElectionData();
+
+        ED4.processVote("gompei", "husky", "ziggy");
     }
 }

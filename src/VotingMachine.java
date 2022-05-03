@@ -3,6 +3,13 @@ public class VotingMachine {
     public Scanner keyboard = new Scanner(System.in);
     public static ElectionData thisElection = new ElectionData();
 
+    public void printBallot() {
+        System.out.println("The candidates are ");
+        for (String s : thisElection.getBallot()) {
+            System.out.println(s);
+        }
+    }
+
         public void screen() throws CandidateExistsException {
         System.out.println("Enter A to add candidate, " +
                 "T to tally the election, or V to vote:");
@@ -14,7 +21,7 @@ public class VotingMachine {
                 thisElection.addCandidate(addCan);
                 break;
             case ("v"):
-                    thisElection.printBallot();
+                    this.printBallot();
                     System.out.println("Select your first vote:");
                     String candidate1 = keyboard.next();
                     System.out.println("Select your second vote:");
